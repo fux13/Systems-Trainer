@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#07111f">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="KA350 Trainer">
+  <title>King Air 350 Systems Trainer</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="icons/icon-192.svg">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div id="app" class="app">
+  <header class="top">
+    <div><div class="eyebrow">B300/B300C · OFFLINE TRAINER</div><h1>King Air 350 Systems Trainer</h1><p>Electrical System · interaktiver GitHub-PWA-Prototyp</p></div>
+    <div class="header-actions"><span class="badge">Fortschritt <b id="overall">0%</b></span><button id="installBtn" class="secondary hidden">App installieren</button></div>
+  </header>
+  <div id="statusBanner" class="banner hidden" role="status"></div>
+  <nav aria-label="Bereiche">
+    <button class="tab active" data-page="trainer">System</button><button class="tab" data-page="learn">Lernen</button><button class="tab" data-page="failure">Failure</button><button class="tab" data-page="quiz">Quiz</button><button class="tab" data-page="progressPage">Fortschritt</button>
+  </nav>
+
+  <main>
+    <section id="trainer" class="page active">
+      <div class="grid">
+        <article class="card"><div class="card-head"><div><h2>DC Power Distribution</h2><p>Bediene Quellen und Ties. Grün markiert versorgte Bereiche.</p></div><button id="resetSystem" class="secondary">Cold & Dark</button></div>
+          <div class="diagram" aria-label="Vereinfachte elektrische Verteilung">
+            <div id="lgen" class="component"><strong>L STARTER-GENERATOR</strong><small>300 A · 28 VDC</small></div>
+            <div id="rgen" class="component"><strong>R STARTER-GENERATOR</strong><small>300 A · 28 VDC</small></div>
+            <div id="ext" class="component compact"><strong>EXT PWR</strong><small>28 VDC</small></div>
+            <div id="lTie" class="contactor">L GEN TIE</div><div id="rTie" class="contactor">R GEN TIE</div>
+            <div id="lbus" class="bus">LEFT GEN BUS</div><div id="centerbus" class="bus">CENTER BUS</div><div id="rbus" class="bus">RIGHT GEN BUS</div>
+            <div id="battery" class="component"><strong>BATTERY</strong><small>42 Ah</small></div><div id="batTie" class="contactor">BAT TIE</div>
+            <div id="triple" class="bus wide">TRIPLE-FED BUS</div>
+          </div>
+        </article>
+        <aside class="stack">
+          <article class="card"><h3>Controls</h3><div class="controls">
+            <button id="btnBat" class="control">BAT OFF</button><button id="btnL" class="control">L GEN OFF</button><button id="btnR" class="control">R GEN OFF</button><button id="btnExt" class="control">EXT PWR OFF</button><button id="btnTies" class="control">GEN TIES NORM</button><button id="btnSense" class="control warn">BUS SENSE TEST</button>
+          </div></article>
+          <article class="card"><h3>CAS / Instrumente</h3><div id="cas" class="cas"></div><p id="explain" class="explain"></p><div class="metrics"><div><b id="volts">0.0</b><span>CTR V</span></div><div><b id="lload">0</b><span>L LOAD %*</span></div><div><b id="rload">0</b><span>R LOAD %*</span></div></div><small>* Lastwerte sind didaktische Simulationswerte.</small></article>
+        </aside>
+      </div>
+    </section>
+
+    <section id="learn" class="page"><div class="grid"><article class="card"><h2>Electrical System</h2><div id="lessonList"></div><button id="completeLesson" class="primary">Lektion als gelernt markieren</button></article><aside class="card"><h3>Trainingshinweis</h3><p>Dieser Prototyp dient ausschließlich dem Systemverständnis. Für Betrieb, Verfahren, Limitationen und Entscheidungen gelten die zugelassenen Unterlagen der konkreten Flugzeugkonfiguration.</p><h3>Merksätze</h3><ul><li>Primäres System: 28 VDC.</li><li>Batterie: 42 Ah.</li><li>Zwei Starter-Generatoren: je 300 A.</li><li>Battery-only isoliert in NORM die Generatorbusse.</li></ul></aside></div></section>
+
+    <section id="failure" class="page"><div class="grid"><article class="card"><h2>Failure Trainer</h2><div class="scenario"><strong id="scenarioTitle"></strong><p id="scenarioText"></p></div><div id="failureOptions"></div><div class="actions"><button id="newScenario" class="primary">Neues Szenario</button><button id="failureUnsure" class="secondary">Unsicher</button></div></article><aside class="card"><h3>Diagnose</h3><p id="failureFeedback">Wähle die wahrscheinlichste Ursache.</p><div class="metrics"><div><b id="fCorrect">0</b><span>Richtig</span></div><div><b id="fWrong">0</b><span>Falsch</span></div><div><b id="fUnsure">0</b><span>Unsicher</span></div></div></aside></div></section>
+
+    <section id="quiz" class="page"><div class="grid"><article class="card"><h2>System Quiz</h2><p id="qText"></p><div id="qOptions"></div><div class="actions"><button id="nextQuestion" class="primary">Nächste Frage</button><button id="quizUnsure" class="secondary">Unsicher</button></div></article><aside class="card"><h3>Session</h3><p id="qFeedback">Wähle eine Antwort.</p><div class="metrics"><div><b id="qCorrect">0</b><span>Richtig</span></div><div><b id="qWrong">0</b><span>Falsch</span></div><div><b id="qUnsure">0</b><span>Unsicher</span></div></div></aside></div></section>
+
+    <section id="progressPage" class="page"><article class="card"><h2>Lernfortschritt</h2><div class="progress"><i id="progbar"></i></div><h3 id="progressText">0%</h3><div id="progressDetails"></div><button id="resetProgress" class="secondary">Fortschritt zurücksetzen</button></article></section>
+  </main>
+  <footer>Version 0.2.0 · Offline-fähige PWA · Trainingsprototyp</footer>
+</div>
+<script src="data.js"></script><script src="app.js"></script>
+</body></html>
